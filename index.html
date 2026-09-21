@@ -81,12 +81,12 @@
   .cat-seg{display:grid; grid-template-columns:repeat(3, 1fr);}
   .cat-seg .seg-btn{flex:none;}
   .cat-seg .seg-btn.active{background:var(--ink); border-color:var(--ink);}
-  .submit-btn{background:var(--ink); color:#fff; border:none; border-radius:8px; padding:10px 16px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; align-self:flex-end;}
+  .submit-btn{background:var(--ink); color:#fff; border:none; border-radius:8px; padding:10px 16px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif;}
   .submit-btn:hover{background:var(--blueprint-dark);}
   .submit-btn:disabled{background:var(--line-strong); cursor:not-allowed;}
+  .add-grid > .submit-btn{align-self:flex-end;}
   .field-label{font-size:12px; color:var(--ink-soft); margin-bottom:-3px;}
 
-  /* ---------- View toggle ---------- */
   .view-toggle{display:flex; gap:8px; margin-bottom:16px;}
   .view-btn{
     flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
@@ -100,7 +100,6 @@
   .chip{border:1px solid var(--line-strong); background:var(--card); color:var(--ink-soft); border-radius:999px; padding:6px 13px; font-size:12.5px; cursor:pointer; font-family:'Inter',sans-serif; display:inline-flex; align-items:center; gap:5px;}
   .chip.active{background:var(--ink); border-color:var(--ink); color:#fff;}
 
-  /* ---------- Timeline ---------- */
   .timeline{position:relative; padding-left:20px;}
   .timeline::before{content:''; position:absolute; left:5px; top:6px; bottom:6px; width:1.5px; background:var(--line-strong);}
   .date-group{position:relative; margin-bottom:26px;}
@@ -112,7 +111,8 @@
   .date-group.past .date-label{color:var(--ink-soft);}
   .date-dday{font-size:12px; color:var(--ink-soft);}
 
-  .item-card{background:var(--card); border:1px solid var(--line); border-radius:11px; padding:12px 13px; margin-bottom:8px; display:flex; gap:11px; align-items:flex-start; box-shadow:var(--shadow); border-left:3px solid var(--line);}
+  .item-card{background:var(--card); border:1px solid var(--line); border-radius:11px; padding:12px 13px; margin-bottom:8px; display:flex; gap:11px; align-items:flex-start; box-shadow:var(--shadow); border-left:3px solid var(--line); cursor:pointer; transition:box-shadow 0.15s;}
+  .item-card:hover{box-shadow:0 3px 10px rgba(30,42,56,0.12);}
   .item-card.done{opacity:0.55;}
   .check{width:19px; height:19px; border-radius:50%; border:1.5px solid var(--line-strong); background:var(--paper); flex:none; cursor:pointer; margin-top:1px; display:flex; align-items:center; justify-content:center; padding:0;}
   .check.checked{background:var(--sage); border-color:var(--sage);}
@@ -139,7 +139,6 @@
   .setup-warning{background:#FBEFE9; border:1px solid var(--clay); color:var(--clay); border-radius:10px; padding:16px; font-size:13.5px; line-height:1.6; margin-bottom:20px;}
   .setup-warning code{background:rgba(0,0,0,0.06); padding:1px 5px; border-radius:4px;}
 
-  /* ---------- Calendar ---------- */
   .cal-card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; box-shadow:var(--shadow);}
   .cal-nav{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;}
   .cal-nav-btn{background:none; border:1px solid var(--line-strong); border-radius:8px; width:32px; height:32px; font-size:14px; color:var(--ink-soft); cursor:pointer;}
@@ -165,7 +164,6 @@
   .cal-legend{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; font-size:11.5px; color:var(--ink-soft);}
   .cal-legend span{display:inline-flex; align-items:center; gap:4px;}
 
-  /* ---------- Modal ---------- */
   .modal-overlay{position:fixed; inset:0; background:rgba(30,42,56,0.45); display:none; align-items:center; justify-content:center; z-index:100; padding:20px;}
   .modal-overlay.open{display:flex;}
   .modal-card{background:var(--card); border-radius:14px; max-width:480px; width:100%; max-height:82vh; overflow-y:auto; padding:18px; box-shadow:0 12px 34px rgba(30,42,56,0.22);}
@@ -174,8 +172,13 @@
   .modal-close{background:none; border:none; font-size:18px; color:var(--ink-soft); cursor:pointer; padding:2px 6px;}
   .modal-close:hover{color:var(--clay);}
   .modal-empty{text-align:center; padding:24px 10px; color:var(--ink-soft); font-size:13.5px;}
-  .quick-add-link{display:inline-block; margin-top:6px; font-size:13px; color:var(--blueprint); background:none; border:none; cursor:pointer; font-family:'Inter',sans-serif; padding:0;}
+  .quick-add-link{display:block; margin-top:10px; font-size:13px; color:var(--blueprint); background:none; border:none; cursor:pointer; font-family:'Inter',sans-serif; padding:0; text-align:left;}
   .quick-add-link:hover{text-decoration:underline;}
+  .check-toggle-row{display:flex; align-items:center; gap:9px; background:var(--paper); border:1px solid var(--line-strong); border-radius:8px; padding:9px 11px; font-size:13.5px; color:var(--ink); cursor:pointer; font-family:'Inter',sans-serif; text-align:left;}
+  .check-toggle-row .check{pointer-events:none;}
+  .modal-actions-row{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:2px;}
+  .link-danger{background:none; border:none; color:var(--clay); cursor:pointer; font-size:13px; font-family:'Inter',sans-serif; padding:6px 4px;}
+  .link-danger:hover{text-decoration:underline;}
 
   @media (max-width:480px){
     .stats{grid-template-columns:repeat(3,1fr); gap:8px;}
@@ -195,22 +198,16 @@
   <div class="loading" id="loading">불러오는 중…</div>
 </div>
 
-<div class="modal-overlay" id="dayModalOverlay">
-  <div class="modal-card" id="dayModalCard"></div>
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-card" id="modalCard"></div>
 </div>
 
 <script>
-/* =========================================================================
-   1) Supabase 설정 — 아래 두 값을 본인 Supabase 프로젝트 값으로 바꿔주세요.
-      README.md의 "1. Supabase 설정" 단계를 따라 값을 채우면 됩니다.
-   ========================================================================= */
 const SUPABASE_URL = "https://yewaplnlnyqaasadlfhp.supabase.co";       // 예: https://xxxxxxxx.supabase.co
 const SUPABASE_ANON_KEY = "sb_publishable_uSC0C873kJPzGFdzKCLwug_xTLlKrKD";
 
 // 우리 부부만 아는 코드입니다. 원하는 문자열로 바꿔서 사용하세요 (영문/숫자 조합 추천).
 const HOUSEHOLD_ID = "indistar";
-
-/* ========================================================================= */
 
 const CATEGORIES = [
   { key:'interior', label:'인테리어', color:'#3E6690' },
@@ -225,9 +222,14 @@ let plan = { movingDate:'', names:['아내','남편'], budget:null, items:[] };
 let myRole = Number(localStorage.getItem('my-role') || 0);
 let filter = 'all';
 let catFilter = 'all';
-let viewMode = 'timeline'; // 'timeline' | 'calendar'
-let calYear, calMonth; // 0-indexed month, initialized in initSupabase after plan loads
-let calendarSelectedDate = null;
+let viewMode = 'timeline';
+let calYear, calMonth;
+let modalMode = null;
+let modalDate = null;
+let modalItemId = null;
+let pendingNewCat = CATEGORIES[0].key;
+let pendingEditCat = CATEGORIES[0].key;
+let pendingEditAuthor = 0;
 let ready = false;
 let synced = false;
 let sb = null;
@@ -290,23 +292,18 @@ function groupByDate(items){
   return groups;
 }
 
-/* ---------------- Supabase 연결 ---------------- */
 async function initSupabase(){
   if(!SUPABASE_URL || SUPABASE_URL === 'YOUR_SUPABASE_URL' || !SUPABASE_ANON_KEY || SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY'){
     document.getElementById('app').innerHTML = `
       <div class="setup-warning">
         <b>설정이 필요해요.</b><br>
-        이 파일 상단의 <code>SUPABASE_URL</code>과 <code>SUPABASE_ANON_KEY</code> 값을 아직 채우지 않았어요.
-        README.md의 안내를 따라 Supabase 테이블을 만들고 설정값을 <code>index.html</code>에 붙여넣은 뒤 다시 배포해주세요.
+        이 파일 상단의 <code>SUPABASE_URL</code>과 <code>SUPABASE_ANON_KEY</code> 값을 채워주세요.
       </div>`;
     return;
   }
-
   try{
     sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
     await loadOnce();
-
     sb.channel('households-changes')
       .on('postgres_changes',
         { event: '*', schema: 'public', table: 'households', filter: `id=eq.${HOUSEHOLD_ID}` },
@@ -315,7 +312,7 @@ async function initSupabase(){
             plan = sanitizePlan(payload.new.data);
             synced = true;
             render();
-            if(calendarSelectedDate) renderDayModal();
+            if(modalMode) renderModal();
           }
         })
       .subscribe(status=>{
@@ -327,33 +324,19 @@ async function initSupabase(){
     document.getElementById('app').innerHTML = `
       <div class="setup-warning">
         <b>Supabase 연결에 실패했어요.</b><br>
-        설정값(SUPABASE_URL, SUPABASE_ANON_KEY)이 올바른지, households 테이블과
-        RLS 정책이 README대로 만들어졌는지 확인해주세요.<br><br>
         오류 내용: ${escapeHtml(e.message || String(e))}
       </div>`;
   }
 }
 
 async function loadOnce(){
-  const { data, error } = await sb
-    .from('households')
-    .select('data')
-    .eq('id', HOUSEHOLD_ID)
-    .maybeSingle();
-
+  const { data, error } = await sb.from('households').select('data').eq('id', HOUSEHOLD_ID).maybeSingle();
   if(error){ throw error; }
-
-  if(data && data.data){
-    plan = sanitizePlan(data.data);
-  }else{
-    plan = defaultPlan();
-    await savePlan();
-  }
-
+  if(data && data.data){ plan = sanitizePlan(data.data); }
+  else{ plan = defaultPlan(); await savePlan(); }
   const base = plan.movingDate ? new Date(plan.movingDate) : new Date();
   calYear = base.getFullYear();
   calMonth = base.getMonth();
-
   ready = true;
   synced = true;
   render();
@@ -361,9 +344,7 @@ async function loadOnce(){
 
 async function savePlan(){
   try{
-    const { error } = await sb
-      .from('households')
-      .upsert({ id: HOUSEHOLD_ID, data: sanitizePlan(plan), updated_at: new Date().toISOString() });
+    const { error } = await sb.from('households').upsert({ id: HOUSEHOLD_ID, data: sanitizePlan(plan), updated_at: new Date().toISOString() });
     if(error) throw error;
   }catch(e){
     console.error('저장 오류', e);
@@ -373,7 +354,6 @@ async function savePlan(){
 
 function saveRole(){ localStorage.setItem('my-role', String(myRole)); }
 
-/* ---------------- 렌더링 ---------------- */
 function render(){
   const app = document.getElementById('app');
   if(!ready){ app.innerHTML = '<div class="loading">불러오는 중…</div>'; return; }
@@ -407,7 +387,7 @@ function render(){
           <div class="field"><label>이름 2</label><input type="text" id="name1Input" value="${escapeHtml(names[1])}"></div>
         </div>
         <div class="field">
-          <label>나는 누구인가요 (이 기기/브라우저에서 기억됩니다)</label>
+          <label>나는 누구인가요</label>
           <div class="seg-toggle">
             <button class="seg-btn ${myRole===0?'active':''}" data-role="0">${escapeHtml(names[0])}</button>
             <button class="seg-btn ${myRole===1?'active':''}" data-role="1">${escapeHtml(names[1])}</button>
@@ -471,7 +451,7 @@ function render(){
     </div>
 
     <div class="toolbar-note">
-      <span><span class="sync-dot ${synced?'':'off'}"></span>${synced?`${escapeHtml(names[0])}, ${escapeHtml(names[1])}과 실시간 공유 중`:'연결 끊김 · 인터넷을 확인해주세요'}</span>
+      <span><span class="sync-dot ${synced?'':'off'}"></span>${synced?`${escapeHtml(names[0])}, ${escapeHtml(names[1])}과 실시간 공유 중`:'연결 끊김'}</span>
     </div>
 
     <div class="view-toggle">
@@ -504,15 +484,12 @@ function renderView(){
 function renderTimeline(){
   const host = document.getElementById('viewHost');
   const items = getFilteredItems();
-
   if(items.length===0){
     host.innerHTML = `<div class="empty"><div class="big">해당하는 기록이 없어요</div>필터를 바꾸거나 위에서 새 항목을 추가해보세요.</div>`;
     return;
   }
-
   items.sort((a,b)=> (a.date||'').localeCompare(b.date||'') || (a.createdAt||0)-(b.createdAt||0));
   const groups = groupByDate(items);
-
   const todayStr = new Date().toISOString().slice(0,10);
   let html = '<div class="timeline">';
   Object.keys(groups).forEach(dateStr=>{
@@ -524,14 +501,11 @@ function renderTimeline(){
         <span class="date-label">${fmtDateLabel(dateStr)}</span>
         <span class="date-dday">${dd===null?'':(dd===0?'오늘':(dd>0?'D-'+dd:'D+'+Math.abs(dd)))}</span>
       </div>`;
-    groups[dateStr].forEach(item=>{
-      html += itemCardHtml(item);
-    });
+    groups[dateStr].forEach(item=>{ html += itemCardHtml(item); });
     html += `</div>`;
   });
   html += '</div>';
   host.innerHTML = html;
-
   bindItemCardEvents(host);
 }
 
@@ -553,16 +527,17 @@ function itemCardHtml(item){
 }
 
 function bindItemCardEvents(container){
+  container.querySelectorAll('.item-card').forEach(card=>{
+    card.addEventListener('click', ()=> openItemModal(card.dataset.id));
+  });
   container.querySelectorAll('.check').forEach(btn=> btn.addEventListener('click', (e)=>{ e.stopPropagation(); toggleDone(btn.dataset.id); }));
   container.querySelectorAll('.del-btn').forEach(btn=> btn.addEventListener('click', (e)=>{ e.stopPropagation(); deleteItem(btn.dataset.id); }));
 }
 
-/* ---------------- 달력 ---------------- */
 function renderCalendar(){
   const host = document.getElementById('viewHost');
   const items = getFilteredItems();
   const groups = groupByDate(items);
-
   const firstOfMonth = new Date(calYear, calMonth, 1);
   const startWeekday = firstOfMonth.getDay();
   const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
@@ -570,7 +545,6 @@ function renderCalendar(){
 
   let cells = '';
   for(let i=0;i<startWeekday;i++){ cells += `<div class="cal-cell empty"></div>`; }
-
   for(let day=1; day<=daysInMonth; day++){
     const dateStr = `${calYear}-${pad2(calMonth+1)}-${pad2(day)}`;
     const dayItems = groups[dateStr] || [];
@@ -579,20 +553,17 @@ function renderCalendar(){
     const cls = ['cal-cell'];
     if(isToday) cls.push('today');
     if(isMoving) cls.push('moving');
-
     const shown = dayItems.slice(0,4);
     const extra = dayItems.length - shown.length;
     const dots = shown.map(it=>{
       const ci = catInfo(it.category);
       return `<span class="cal-dot-sm" style="background:${ci.color}; ${it.done?'opacity:0.35;':''}"></span>`;
     }).join('');
-
     cells += `<div class="${cls.join(' ')}" data-date="${dateStr}">
       <span class="cal-daynum">${day}</span>
       <div class="cal-dots">${dots}${extra>0?`<span class="cal-more">+${extra}</span>`:''}</div>
     </div>`;
   }
-
   const totalCells = startWeekday + daysInMonth;
   const trailing = (7 - (totalCells % 7)) % 7;
   for(let i=0;i<trailing;i++){ cells += `<div class="cal-cell empty"></div>`; }
@@ -604,63 +575,50 @@ function renderCalendar(){
         <span class="cal-month-label">${calYear}년 ${calMonth+1}월</span>
         <button class="cal-nav-btn" id="calNext" aria-label="다음 달">›</button>
       </div>
-      <div class="cal-weekdays">
-        <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
-      </div>
+      <div class="cal-weekdays"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
       <div class="cal-grid">${cells}</div>
-      <div class="cal-legend">
-        ${CATEGORIES.map(c=>`<span><span class="cal-dot-sm" style="background:${c.color}"></span>${c.label}</span>`).join('')}
-      </div>
+      <div class="cal-legend">${CATEGORIES.map(c=>`<span><span class="cal-dot-sm" style="background:${c.color}"></span>${c.label}</span>`).join('')}</div>
     </div>
   `;
 
-  document.getElementById('calPrev').addEventListener('click', ()=>{
-    calMonth--; if(calMonth<0){ calMonth=11; calYear--; }
-    renderCalendar();
-  });
-  document.getElementById('calNext').addEventListener('click', ()=>{
-    calMonth++; if(calMonth>11){ calMonth=0; calYear++; }
-    renderCalendar();
-  });
+  document.getElementById('calPrev').addEventListener('click', ()=>{ calMonth--; if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); });
+  document.getElementById('calNext').addEventListener('click', ()=>{ calMonth++; if(calMonth>11){calMonth=0;calYear++;} renderCalendar(); });
   host.querySelectorAll('.cal-cell[data-date]').forEach(cell=>{
     cell.addEventListener('click', ()=> openDayModal(cell.dataset.date));
   });
 }
 
-/* ---------------- 날짜 상세 모달 ---------------- */
+function openModalOverlay(){ document.getElementById('modalOverlay').classList.add('open'); }
+function closeModal(){
+  modalMode = null; modalDate = null; modalItemId = null;
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+function renderModal(){
+  if(modalMode === 'day') renderDayModalContent();
+  else if(modalMode === 'item') renderItemModalContent();
+}
 function openDayModal(dateStr){
-  calendarSelectedDate = dateStr;
-  document.getElementById('dayModalOverlay').classList.add('open');
-  renderDayModal();
+  modalMode = 'day'; modalDate = dateStr; modalItemId = null;
+  openModalOverlay(); renderModal();
 }
-function closeDayModal(){
-  calendarSelectedDate = null;
-  document.getElementById('dayModalOverlay').classList.remove('open');
-}
-function renderDayModal(){
-  if(!calendarSelectedDate) return;
-  const dateStr = calendarSelectedDate;
-  const items = getFilteredItems().filter(i=> i.date===dateStr)
-    .sort((a,b)=> (a.createdAt||0)-(b.createdAt||0));
-  const card = document.getElementById('dayModalCard');
-
+function renderDayModalContent(){
+  const dateStr = modalDate;
+  const items = getFilteredItems().filter(i=> i.date===dateStr).sort((a,b)=> (a.createdAt||0)-(b.createdAt||0));
+  const card = document.getElementById('modalCard');
   card.innerHTML = `
     <div class="modal-head">
       <p class="modal-title">${fmtDateLabel(dateStr)}</p>
       <button class="modal-close" id="modalCloseBtn" aria-label="닫기">✕</button>
     </div>
-    ${items.length===0
-      ? `<div class="modal-empty">이 날짜에는 아직 기록이 없어요.<br><button class="quick-add-link" id="quickAddBtn">+ 이 날짜에 새 일정 추가하기</button></div>`
-      : items.map(itemCardHtml).join('') + `<button class="quick-add-link" id="quickAddBtn">+ 이 날짜에 새 일정 추가하기</button>`
-    }
+    ${items.length===0 ? `<div class="modal-empty">이 날짜에는 아직 기록이 없어요.</div>` : items.map(itemCardHtml).join('')}
+    <button class="quick-add-link" id="quickAddBtn">+ 이 날짜에 새 일정 추가하기</button>
   `;
-
-  document.getElementById('modalCloseBtn').addEventListener('click', closeDayModal);
+  document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
   document.getElementById('quickAddBtn').addEventListener('click', ()=> quickAddOnDate(dateStr));
   bindItemCardEvents(card);
 }
 function quickAddOnDate(dateStr){
-  closeDayModal();
+  closeModal();
   const dateInput = document.getElementById('newDate');
   if(dateInput){
     dateInput.value = dateStr;
@@ -668,31 +626,112 @@ function quickAddOnDate(dateStr){
     document.getElementById('newTitle').focus();
   }
 }
-
+function openItemModal(itemId){
+  modalMode = 'item'; modalItemId = itemId;
+  openModalOverlay(); renderModal();
+}
+function renderItemModalContent(){
+  const item = plan.items.find(i=>i.id===modalItemId);
+  if(!item){ closeModal(); return; }
+  pendingEditCat = item.category || 'etc';
+  pendingEditAuthor = item.author===1 ? 1 : 0;
+  const names = plan.names;
+  const card = document.getElementById('modalCard');
+  card.innerHTML = `
+    <div class="modal-head">
+      <p class="modal-title">일정 수정</p>
+      <button class="modal-close" id="modalCloseBtn" aria-label="닫기">✕</button>
+    </div>
+    <div class="add-grid">
+      <div class="row2">
+        <input type="date" id="editDate" value="${item.date}">
+        <input type="text" id="editTitle" value="${escapeHtml(item.title)}">
+      </div>
+      <div>
+        <div class="field-label">카테고리</div>
+        <div class="seg-toggle cat-seg" id="editCatToggle">
+          ${CATEGORIES.map(c=>`<button type="button" class="seg-btn ${c.key===pendingEditCat?'active':''}" data-cat="${c.key}">${c.label}</button>`).join('')}
+        </div>
+      </div>
+      <div class="row2">
+        <input type="number" id="editCost" min="0" placeholder="비용 (선택, 원)" value="${item.cost===null||item.cost===undefined?'':item.cost}">
+        <div class="seg-toggle" id="editAuthorToggle">
+          <button type="button" class="seg-btn ${pendingEditAuthor===0?'active':''}" data-role="0">${escapeHtml(names[0])}</button>
+          <button type="button" class="seg-btn ${pendingEditAuthor===1?'active':''}" data-role="1">${escapeHtml(names[1])}</button>
+        </div>
+      </div>
+      <textarea id="editMemo" placeholder="메모 (선택)">${escapeHtml(item.memo||'')}</textarea>
+      <button class="check-toggle-row" id="editDoneToggle" type="button">
+        <span class="check ${item.done?'checked':''}"></span> ${item.done?'완료됨 (다시 누르면 취소)':'완료로 표시'}
+      </button>
+      <div class="modal-actions-row">
+        <button class="link-danger" id="editDeleteBtn" type="button">삭제하기</button>
+        <button class="submit-btn" id="editSaveBtn" type="button">저장하기</button>
+      </div>
+      ${modalDate ? `<button class="quick-add-link" id="modalBackBtn">← ${fmtDateLabel(modalDate)} 목록으로</button>` : ''}
+    </div>
+  `;
+  document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+  document.querySelectorAll('#editCatToggle .seg-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      pendingEditCat = btn.dataset.cat;
+      document.querySelectorAll('#editCatToggle .seg-btn').forEach(b=> b.classList.toggle('active', b.dataset.cat===pendingEditCat));
+    });
+  });
+  document.querySelectorAll('#editAuthorToggle .seg-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      pendingEditAuthor = Number(btn.dataset.role);
+      document.querySelectorAll('#editAuthorToggle .seg-btn').forEach(b=> b.classList.toggle('active', Number(b.dataset.role)===pendingEditAuthor));
+    });
+  });
+  document.getElementById('editDoneToggle').addEventListener('click', ()=> toggleDone(item.id));
+  document.getElementById('editDeleteBtn').addEventListener('click', ()=> deleteItem(item.id));
+  document.getElementById('editSaveBtn').addEventListener('click', ()=> saveItemEdits(item.id));
+  if(modalDate){
+    document.getElementById('modalBackBtn').addEventListener('click', ()=>{ modalMode='day'; modalItemId=null; renderModal(); });
+  }
+}
+function saveItemEdits(id){
+  const item = plan.items.find(i=>i.id===id);
+  if(!item) return;
+  const dateVal = document.getElementById('editDate').value;
+  const titleVal = document.getElementById('editTitle').value.trim();
+  if(!dateVal || !titleVal){ document.getElementById('editTitle').focus(); return; }
+  item.date = dateVal;
+  item.title = titleVal;
+  item.memo = document.getElementById('editMemo').value.trim();
+  const costVal = document.getElementById('editCost').value;
+  item.cost = costVal==='' ? null : Number(costVal);
+  item.category = pendingEditCat;
+  item.author = pendingEditAuthor;
+  if(modalDate){ modalMode = 'day'; modalItemId = null; } else { closeModal(); }
+  render();
+  if(modalMode) renderModal();
+  savePlan();
+}
 function toggleDone(id){
   const item = plan.items.find(i=>i.id===id);
   if(!item) return;
   item.done = !item.done;
   render();
-  if(calendarSelectedDate) renderDayModal();
+  if(modalMode) renderModal();
   savePlan();
 }
 function deleteItem(id){
   plan.items = plan.items.filter(i=>i.id!==id);
+  if(modalItemId === id){
+    if(modalDate){ modalMode = 'day'; modalItemId = null; } else { closeModal(); }
+  }
   render();
-  if(calendarSelectedDate) renderDayModal();
+  if(modalMode) renderModal();
   savePlan();
 }
 
-let pendingNewCat = CATEGORIES[0].key;
-
 function bindEvents(){
   pendingNewCat = CATEGORIES[0].key;
-
   document.getElementById('settingsToggle').addEventListener('click', ()=>{
     document.getElementById('settingsPanel').classList.toggle('open');
   });
-
   document.querySelectorAll('#settingsPanel .seg-btn[data-role]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       myRole = Number(btn.dataset.role);
@@ -700,7 +739,6 @@ function bindEvents(){
       document.querySelectorAll('#newAuthorToggle .seg-btn').forEach(b=> b.classList.toggle('active', Number(b.dataset.role)===myRole));
     });
   });
-
   document.getElementById('saveSettings').addEventListener('click', async ()=>{
     plan.movingDate = document.getElementById('movingDateInput').value;
     plan.names[0] = document.getElementById('name0Input').value.trim() || '아내';
@@ -711,7 +749,6 @@ function bindEvents(){
     await savePlan();
     render();
   });
-
   document.querySelectorAll('#newAuthorToggle .seg-btn').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       myRole = Number(btn.dataset.role);
@@ -719,14 +756,12 @@ function bindEvents(){
       document.querySelectorAll('#newAuthorToggle .seg-btn').forEach(b=> b.classList.toggle('active', Number(b.dataset.role)===myRole));
     });
   });
-
   document.querySelectorAll('#newCatToggle .seg-btn').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       pendingNewCat = btn.dataset.cat;
       document.querySelectorAll('#newCatToggle .seg-btn').forEach(b=> b.classList.toggle('active', b.dataset.cat===pendingNewCat));
     });
   });
-
   document.querySelectorAll('.view-toggle .view-btn').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       viewMode = btn.dataset.view;
@@ -734,7 +769,6 @@ function bindEvents(){
       renderView();
     });
   });
-
   document.querySelectorAll('.filters:not(.cats) .chip').forEach(chip=>{
     chip.addEventListener('click', ()=>{
       filter = chip.dataset.f;
@@ -742,7 +776,6 @@ function bindEvents(){
       document.querySelectorAll('.filters:not(.cats) .chip').forEach(c=> c.classList.toggle('active', c.dataset.f===filter));
     });
   });
-
   document.querySelectorAll('.filters.cats .chip').forEach(chip=>{
     chip.addEventListener('click', ()=>{
       catFilter = chip.dataset.cf;
@@ -750,13 +783,12 @@ function bindEvents(){
       document.querySelectorAll('.filters.cats .chip').forEach(c=> c.classList.toggle('active', c.dataset.cf===catFilter));
     });
   });
-
   document.getElementById('addBtn').addEventListener('click', addItem);
   document.getElementById('newTitle').addEventListener('keydown', e=>{ if(e.key==='Enter') addItem(); });
 }
 
-document.getElementById('dayModalOverlay').addEventListener('click', (e)=>{
-  if(e.target.id === 'dayModalOverlay') closeDayModal();
+document.getElementById('modalOverlay').addEventListener('click', (e)=>{
+  if(e.target.id === 'modalOverlay') closeModal();
 });
 
 async function addItem(){
@@ -764,15 +796,12 @@ async function addItem(){
   const titleVal = document.getElementById('newTitle').value.trim();
   const costVal = document.getElementById('newCost').value;
   const memoVal = document.getElementById('newMemo').value.trim();
-
   if(!dateVal || !titleVal){ document.getElementById('newTitle').focus(); return; }
-
   plan.items.push({
     id: uid(), date: dateVal, title: titleVal, memo: memoVal,
     cost: costVal==='' ? null : Number(costVal),
     category: pendingNewCat, done: false, author: myRole, createdAt: Date.now()
   });
-
   saveRole();
   render();
   await savePlan();
