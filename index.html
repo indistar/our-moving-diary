@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이사 준비 다이어리</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+  :root{
+    --ink:#1E2A38; --ink-soft:#4A5A6A;
+    --blueprint:#3E6690; --blueprint-dark:#2C4A66;
+    --paper:#F6F2E9; --card:#FFFFFF;
+    --mustard:#B9862F; --mustard-bg:#FBF0DC;
+    --sage:#5F7A5C; --sage-bg:#E9F0E6;
+    --plum:#7C6A9C; --plum-bg:#EEEAF3;
+    --clay:#AD4E39;
+    --line:#E3DAC5; --line-strong:#D2C7AC;
+    --shadow: 0 1px 2px rgba(30,42,56,0.06);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--paper); color:var(--ink); font-family:'Inter',system-ui,sans-serif; -webkit-font-smoothing:antialiased; min-height:100vh;}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 80px;}
+  button:focus-visible, input:focus-visible, textarea:focus-visible{outline:2px solid var(--blueprint); outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;} }
+
+  header{margin-bottom:22px;}
+  .eyebrow-row{display:flex; justify-content:space-between; align-items:flex-start; gap:12px;}
+  h1{font-family:'Fraunces', serif; font-weight:600; font-size:30px; letter-spacing:-0.01em; margin:0 0 4px; color:var(--ink);}
+  .sub{font-size:14px; color:var(--ink-soft); margin:0;}
+  .gear-btn{background:none; border:1px solid var(--line-strong); border-radius:8px; padding:7px 12px; font-size:13px; color:var(--ink-soft); cursor:pointer; font-family:'Inter',sans-serif;}
+  .gear-btn:hover{border-color:var(--blueprint); color:var(--blueprint-dark);}
+
+  .settings{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:18px; display:none; gap:12px; flex-direction:column;}
+  .settings.open{display:flex;}
+  .settings-row{display:flex; gap:10px; flex-wrap:wrap;}
+  .field{display:flex; flex-direction:column; gap:5px; flex:1; min-width:130px;}
+  .field label{font-size:12px; color:var(--ink-soft);}
+  .field input{border:1px solid var(--line-strong); border-radius:7px; padding:8px 10px; font-family:'Inter',sans-serif; font-size:14px; background:var(--paper); color:var(--ink);}
+  .settings-actions{display:flex; justify-content:flex-end; gap:8px;}
+
+  .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px;}
+  .stat{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 14px 12px; box-shadow:var(--shadow);}
+  .stat .num{font-family:'Fraunces', serif; font-weight:600; font-size:26px; color:var(--blueprint-dark); line-height:1.1;}
+  .stat.money .num{color:var(--mustard);}
+  .stat .lbl{font-size:12px; color:var(--ink-soft); margin-top:3px;}
+
+  .budget-card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:22px; box-shadow:var(--shadow);}
+  .budget-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px;}
+  .budget-title{font-size:14px; font-weight:600; color:var(--ink); margin:0;}
+  .budget-figures{font-size:12.5px; color:var(--ink-soft);}
+  .budget-figures b{color:var(--ink); font-weight:600;}
+  .progress-track{width:100%; height:9px; background:var(--paper); border:1px solid var(--line); border-radius:999px; overflow:hidden; margin-bottom:4px;}
+  .progress-fill{height:100%; background:var(--blueprint); border-radius:999px;}
+  .progress-fill.over{background:var(--clay);}
+  .progress-caption{font-size:11.5px; color:var(--ink-soft); margin-bottom:14px;}
+  .cat-bars{display:flex; flex-direction:column; gap:9px;}
+  .cat-bar-row{display:flex; align-items:center; gap:10px;}
+  .cat-bar-label{width:70px; flex:none; font-size:12.5px; color:var(--ink-soft); display:flex; align-items:center; gap:5px;}
+  .cat-dot{width:7px; height:7px; border-radius:50%; flex:none;}
+  .cat-bar-track{flex:1; height:8px; background:var(--paper); border-radius:999px; overflow:hidden; border:1px solid var(--line);}
+  .cat-bar-fill{height:100%; border-radius:999px;}
+  .cat-bar-amt{width:82px; flex:none; text-align:right; font-size:12.5px; color:var(--ink-soft);}
+  .no-budget-note{font-size:12px; color:var(--ink-soft); font-style:italic;}
+
+  .add-card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:22px; box-shadow:var(--shadow);}
+  .add-title{font-size:14px; font-weight:600; color:var(--ink); margin:0 0 12px;}
+  .add-grid{display:flex; flex-direction:column; gap:10px;}
+  .row2{display:flex; gap:10px;}
+  .row2 > *{flex:1;}
+  input[type=text], input[type=date], input[type=number], textarea{
+    border:1px solid var(--line-strong); border-radius:8px; padding:9px 11px; font-family:'Inter',sans-serif; font-size:14px; color:var(--ink); background:var(--paper); width:100%;
+  }
+  textarea{resize:vertical; min-height:40px; font-family:'Inter',sans-serif;}
+  .seg-toggle{display:flex; gap:6px; flex-wrap:wrap;}
+  .seg-btn{flex:1; border:1px solid var(--line-strong); background:var(--paper); color:var(--ink-soft); border-radius:8px; padding:9px 6px; font-size:12.5px; cursor:pointer; font-family:'Inter',sans-serif; white-space:nowrap;}
+  .seg-btn.active{background:var(--blueprint); border-color:var(--blueprint); color:#fff;}
+  .cat-seg .seg-btn.active{background:var(--ink); border-color:var(--ink);}
+  .submit-btn{background:var(--ink); color:#fff; border:none; border-radius:8px; padding:10px 16px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; align-self:flex-end;}
+  .submit-btn:hover{background:var(--blueprint-dark);}
+  .submit-btn:disabled{background:var(--line-strong); cursor:not-allowed;}
+  .field-label{font-size:12px; color:var(--ink-soft); margin-bottom:-3px;}
+
+  .filters{display:flex; gap:7px; margin-bottom:10px; flex-wrap:wrap;}
+  .filters.cats{margin-bottom:16px;}
+  .chip{border:1px solid var(--line-strong); background:var(--card); color:var(--ink-soft); border-radius:999px; padding:6px 13px; font-size:12.5px; cursor:pointer; font-family:'Inter',sans-serif; display:inline-flex; align-items:center; gap:5px;}
+  .chip.active{background:var(--ink); border-color:var(--ink); color:#fff;}
+
+  .timeline{position:relative; padding-left:20px;}
+  .timeline::before{content:''; position:absolute; left:5px; top:6px; bottom:6px; width:1.5px; background:var(--line-strong);}
+  .date-group{position:relative; margin-bottom:26px;}
+  .date-head{position:relative; display:flex; align-items:baseline; gap:8px; margin-bottom:10px; margin-left:-20px; padding-left:20px;}
+  .date-dot{position:absolute; left:1px; top:5px; width:9px; height:9px; border-radius:50%; background:var(--blueprint); border:2px solid var(--paper);}
+  .date-group.past .date-dot{background:var(--line-strong);}
+  .date-group.today .date-dot{background:var(--clay); box-shadow:0 0 0 3px rgba(173,78,57,0.15);}
+  .date-label{font-family:'Fraunces', serif; font-weight:600; font-size:16px; color:var(--ink);}
+  .date-group.past .date-label{color:var(--ink-soft);}
+  .date-dday{font-size:12px; color:var(--ink-soft);}
+
+  .item-card{background:var(--card); border:1px solid var(--line); border-radius:11px; padding:12px 13px; margin-bottom:8px; display:flex; gap:11px; align-items:flex-start; box-shadow:var(--shadow); border-left:3px solid var(--line);}
+  .item-card.done{opacity:0.55;}
+  .check{width:19px; height:19px; border-radius:50%; border:1.5px solid var(--line-strong); background:var(--paper); flex:none; cursor:pointer; margin-top:1px; display:flex; align-items:center; justify-content:center; padding:0;}
+  .check.checked{background:var(--sage); border-color:var(--sage);}
+  .check.checked::after{content:'✓'; color:#fff; font-size:12px; line-height:1;}
+  .item-body{flex:1; min-width:0;}
+  .item-title{font-size:14.5px; color:var(--ink); font-weight:500; line-height:1.4;}
+  .item-card.done .item-title{text-decoration:line-through;}
+  .item-memo{font-size:13px; color:var(--ink-soft); margin-top:3px; line-height:1.5;}
+  .item-meta{display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;}
+  .tag{font-size:11.5px; padding:3px 8px; border-radius:999px; background:var(--sage-bg); color:var(--sage);}
+  .tag.cost{background:var(--mustard-bg); color:var(--mustard);}
+  .tag.author{background:#EEF2F6; color:var(--blueprint-dark);}
+  .del-btn{background:none; border:none; color:var(--line-strong); cursor:pointer; font-size:15px; padding:2px 4px; flex:none; line-height:1;}
+  .del-btn:hover{color:var(--clay);}
+
+  .empty{text-align:center; padding:40px 20px; color:var(--ink-soft); font-size:14px;}
+  .empty .big{font-family:'Fraunces', serif; font-size:18px; color:var(--ink); margin-bottom:6px;}
+
+  .toolbar-note{display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--ink-soft); margin:-6px 0 16px;}
+  .sync-dot{display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--sage); margin-right:5px;}
+  .sync-dot.off{background:var(--line-strong);}
+
+  .loading{text-align:center; padding:60px 0; color:var(--ink-soft); font-size:14px;}
+  .setup-warning{background:#FBEFE9; border:1px solid var(--clay); color:var(--clay); border-radius:10px; padding:16px; font-size:13.5px; line-height:1.6; margin-bottom:20px;}
+  .setup-warning code{background:rgba(0,0,0,0.06); padding:1px 5px; border-radius:4px;}
+
+  @media (max-width:480px){
+    .stats{grid-template-columns:repeat(3,1fr); gap:8px;}
+    .stat{padding:10px 10px 9px;}
+    .stat .num{font-size:21px;}
+    .row2{flex-direction:column;}
+    .cat-bar-label{width:56px; font-size:11.5px;}
+    .cat-bar-amt{width:70px; font-size:11.5px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <div class="loading" id="loading">불러오는 중…</div>
+</div>
+
+<script>
+/* =========================================================================
+   1) Supabase 설정 — 아래 두 값을 본인 Supabase 프로젝트 값으로 바꿔주세요.
+      README.md의 "1. Supabase 설정" 단계를 따라 값을 채우면 됩니다.
+   ========================================================================= */
+const SUPABASE_URL = "https://yewaplnlnyqaasadlfhp.supabase.co/rest/v1/";       // 예: https://xxxxxxxx.supabase.co
+const SUPABASE_ANON_KEY = "sb_publishable_uSC0C873kJPzGFdzKCLwug_xTLlKrKD";
+
+// 우리 부부만 아는 코드입니다. 원하는 문자열로 바꿔서 사용하세요 (영문/숫자 조합 추천).
+const HOUSEHOLD_ID = "indistar";
+
+/* ========================================================================= */
+
+const CATEGORIES = [
+  { key:'interior', label:'인테리어', color:'#3E6690' },
+  { key:'moving',   label:'이사업체', color:'#B9862F' },
+  { key:'admin',    label:'행정',    color:'#5F7A5C' },
+  { key:'etc',      label:'기타',    color:'#7C6A9C' }
+];
+
+let plan = { movingDate:'', names:['아내','남편'], budget:null, items:[] };
+let myRole = Number(localStorage.getItem('my-role') || 0);
+let filter = 'all';
+let catFilter = 'all';
+let ready = false;
+let synced = false;
+let sb = null;
+
+function uid(){ return 'i' + Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+function defaultPlan(){ return { movingDate:'', names:['아내','남편'], budget:null, items:[] }; }
+function catInfo(key){ return CATEGORIES.find(c=>c.key===key) || CATEGORIES[3]; }
+function fmtMoney(n){ if(n===null||n===undefined||n==='') return ''; return Number(n).toLocaleString('ko-KR') + '원'; }
+function dday(dateStr){
+  if(!dateStr) return null;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const target = new Date(dateStr); target.setHours(0,0,0,0);
+  return Math.round((target - today) / 86400000);
+}
+function fmtDateLabel(dateStr){
+  const d = new Date(dateStr);
+  const days = ['일','월','화','수','목','금','토'];
+  return `${d.getMonth()+1}월 ${d.getDate()}일 (${days[d.getDay()]})`;
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function categoryTotals(){
+  const totals = {}; CATEGORIES.forEach(c=> totals[c.key]=0);
+  plan.items.forEach(i=>{
+    const amt = Number(i.cost)||0;
+    if(amt>0) totals[i.category||'etc'] = (totals[i.category||'etc']||0) + amt;
+  });
+  return totals;
+}
+function sanitizePlan(p){
+  return {
+    movingDate: p.movingDate || '',
+    names: [p.names?.[0] || '아내', p.names?.[1] || '남편'],
+    budget: (p.budget===undefined || p.budget===null || p.budget==='') ? null : Number(p.budget),
+    items: (p.items||[]).map(i=>({
+      id: i.id || uid(),
+      date: i.date || '',
+      title: i.title || '',
+      memo: i.memo || '',
+      cost: (i.cost===undefined || i.cost===null || i.cost==='') ? null : Number(i.cost),
+      category: i.category || 'etc',
+      done: !!i.done,
+      author: i.author===1 ? 1 : 0,
+      createdAt: i.createdAt || Date.now()
+    }))
+  };
+}
+
+/* ---------------- Supabase 연결 ---------------- */
+async function initSupabase(){
+  if(!SUPABASE_URL || SUPABASE_URL === 'YOUR_SUPABASE_URL' || !SUPABASE_ANON_KEY || SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY'){
+    document.getElementById('app').innerHTML = `
+      <div class="setup-warning">
+        <b>설정이 필요해요.</b><br>
+        이 파일 상단의 <code>SUPABASE_URL</code>과 <code>SUPABASE_ANON_KEY</code> 값을 아직 채우지 않았어요.
+        README.md의 안내를 따라 Supabase 테이블을 만들고 설정값을 <code>index.html</code>에 붙여넣은 뒤 다시 배포해주세요.
+      </div>`;
+    return;
+  }
+
+  try{
+    sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    await loadOnce();
+
+    sb.channel('households-changes')
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'households', filter: `id=eq.${HOUSEHOLD_ID}` },
+        payload => {
+          if(payload.new && payload.new.data){
+            plan = sanitizePlan(payload.new.data);
+            synced = true;
+            render();
+          }
+        })
+      .subscribe(status=>{
+        synced = (status === 'SUBSCRIBED');
+        render();
+      });
+  }catch(e){
+    console.error(e);
+    document.getElementById('app').innerHTML = `
+      <div class="setup-warning">
+        <b>Supabase 연결에 실패했어요.</b><br>
+        설정값(SUPABASE_URL, SUPABASE_ANON_KEY)이 올바른지, households 테이블과
+        RLS 정책이 README대로 만들어졌는지 확인해주세요.<br><br>
+        오류 내용: ${escapeHtml(e.message || String(e))}
+      </div>`;
+  }
+}
+
+async function loadOnce(){
+  const { data, error } = await sb
+    .from('households')
+    .select('data')
+    .eq('id', HOUSEHOLD_ID)
+    .maybeSingle();
+
+  if(error){ throw error; }
+
+  if(data && data.data){
+    plan = sanitizePlan(data.data);
+  }else{
+    plan = defaultPlan();
+    await savePlan();
+  }
+  ready = true;
+  synced = true;
+  render();
+}
+
+async function savePlan(){
+  try{
+    const { error } = await sb
+      .from('households')
+      .upsert({ id: HOUSEHOLD_ID, data: sanitizePlan(plan), updated_at: new Date().toISOString() });
+    if(error) throw error;
+  }catch(e){
+    console.error('저장 오류', e);
+    alert('저장에 실패했어요. 인터넷 연결을 확인해주세요.');
+  }
+}
+
+function saveRole(){ localStorage.setItem('my-role', String(myRole)); }
+
+/* ---------------- 렌더링 ---------------- */
+function render(){
+  const app = document.getElementById('app');
+  if(!ready){ app.innerHTML = '<div class="loading">불러오는 중…</div>'; return; }
+
+  const names = plan.names;
+  const md = dday(plan.movingDate);
+  const totals = categoryTotals();
+  const totalCost = Object.values(totals).reduce((a,b)=>a+b,0);
+  const openCount = plan.items.filter(i=>!i.done).length;
+  const budget = plan.budget;
+  const maxCat = Math.max(1, ...Object.values(totals));
+  const budgetPct = budget ? Math.min(100, Math.round((totalCost/budget)*100)) : 0;
+  const isOver = budget && totalCost > budget;
+
+  app.innerHTML = `
+    <header>
+      <div class="eyebrow-row">
+        <div>
+          <h1>이사 준비 다이어리</h1>
+          <p class="sub">${escapeHtml(names[0])} · ${escapeHtml(names[1])}이 함께 채워가는 일정, 할일, 비용</p>
+        </div>
+        <button class="gear-btn" id="settingsToggle">설정</button>
+      </div>
+      <div class="settings" id="settingsPanel">
+        <div class="settings-row">
+          <div class="field"><label>이사 예정일</label><input type="date" id="movingDateInput" value="${plan.movingDate || ''}"></div>
+          <div class="field"><label>총 예산 (원)</label><input type="number" id="budgetInput" min="0" placeholder="예: 20000000" value="${budget===null?'':budget}"></div>
+        </div>
+        <div class="settings-row">
+          <div class="field"><label>이름 1</label><input type="text" id="name0Input" value="${escapeHtml(names[0])}"></div>
+          <div class="field"><label>이름 2</label><input type="text" id="name1Input" value="${escapeHtml(names[1])}"></div>
+        </div>
+        <div class="field">
+          <label>나는 누구인가요 (이 기기/브라우저에서 기억됩니다)</label>
+          <div class="seg-toggle">
+            <button class="seg-btn ${myRole===0?'active':''}" data-role="0">${escapeHtml(names[0])}</button>
+            <button class="seg-btn ${myRole===1?'active':''}" data-role="1">${escapeHtml(names[1])}</button>
+          </div>
+        </div>
+        <div class="settings-actions"><button class="submit-btn" id="saveSettings">저장</button></div>
+      </div>
+    </header>
+
+    <div class="stats">
+      <div class="stat"><div class="num">${md===null?'–':(md>=0?'D-'+md:'D+'+Math.abs(md))}</div><div class="lbl">${plan.movingDate?fmtDateLabel(plan.movingDate):'이사일 미설정'}</div></div>
+      <div class="stat money"><div class="num">${fmtMoney(totalCost)||'0원'}</div><div class="lbl">예상 비용 합계</div></div>
+      <div class="stat"><div class="num">${openCount}</div><div class="lbl">남은 할일</div></div>
+    </div>
+
+    <div class="budget-card">
+      <div class="budget-head">
+        <p class="budget-title">예산 대비 지출</p>
+        ${budget ? `<span class="budget-figures"><b>${fmtMoney(totalCost)}</b> / ${fmtMoney(budget)}</span>` : ''}
+      </div>
+      ${budget ? `
+        <div class="progress-track"><div class="progress-fill ${isOver?'over':''}" style="width:${budgetPct}%"></div></div>
+        <div class="progress-caption">${isOver ? `예산을 ${fmtMoney(totalCost-budget)} 초과했어요` : `예산의 ${budgetPct}% 사용 · ${fmtMoney(budget-totalCost)} 남음`}</div>
+      ` : `<p class="no-budget-note">설정에서 총 예산을 입력하면 진행률을 볼 수 있어요.</p>`}
+      <div class="cat-bars">
+        ${CATEGORIES.map(c=>{
+          const amt = totals[c.key]||0;
+          const pct = Math.round((amt/maxCat)*100);
+          return `<div class="cat-bar-row">
+            <span class="cat-bar-label"><span class="cat-dot" style="background:${c.color}"></span>${c.label}</span>
+            <span class="cat-bar-track"><span class="cat-bar-fill" style="width:${amt>0?pct:0}%; background:${c.color}"></span></span>
+            <span class="cat-bar-amt">${amt>0?fmtMoney(amt):'–'}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+
+    <div class="add-card">
+      <p class="add-title">새 일정 / 할일 추가</p>
+      <div class="add-grid">
+        <div class="row2">
+          <input type="date" id="newDate" value="${plan.movingDate || new Date().toISOString().slice(0,10)}">
+          <input type="text" id="newTitle" placeholder="예: 장판 시공, 관리비 정산">
+        </div>
+        <div>
+          <div class="field-label">카테고리</div>
+          <div class="seg-toggle cat-seg" id="newCatToggle">
+            ${CATEGORIES.map((c,idx)=>`<button type="button" class="seg-btn ${idx===0?'active':''}" data-cat="${c.key}">${c.label}</button>`).join('')}
+          </div>
+        </div>
+        <div class="row2">
+          <input type="number" id="newCost" placeholder="비용 (선택, 원)" min="0">
+          <div class="seg-toggle" id="newAuthorToggle">
+            <button type="button" class="seg-btn ${myRole===0?'active':''}" data-role="0">${escapeHtml(names[0])}</button>
+            <button type="button" class="seg-btn ${myRole===1?'active':''}" data-role="1">${escapeHtml(names[1])}</button>
+          </div>
+        </div>
+        <textarea id="newMemo" placeholder="메모 (선택)"></textarea>
+        <button class="submit-btn" id="addBtn">추가하기</button>
+      </div>
+    </div>
+
+    <div class="toolbar-note">
+      <span><span class="sync-dot ${synced?'':'off'}"></span>${synced?`${escapeHtml(names[0])}, ${escapeHtml(names[1])}과 실시간 공유 중`:'연결 끊김 · 인터넷을 확인해주세요'}</span>
+    </div>
+
+    <div class="filters">
+      <button class="chip ${filter==='all'?'active':''}" data-f="all">전체</button>
+      <button class="chip ${filter==='open'?'active':''}" data-f="open">미완료만</button>
+      <button class="chip ${filter==='cost'?'active':''}" data-f="cost">비용 있는 것만</button>
+    </div>
+    <div class="filters cats">
+      <button class="chip ${catFilter==='all'?'active':''}" data-cf="all">카테고리 전체</button>
+      ${CATEGORIES.map(c=>`<button class="chip ${catFilter===c.key?'active':''}" data-cf="${c.key}"><span class="cat-dot" style="background:${c.color}"></span>${c.label}</button>`).join('')}
+    </div>
+
+    <div id="timelineHost"></div>
+  `;
+
+  renderTimeline();
+  bindEvents();
+}
+
+function renderTimeline(){
+  const host = document.getElementById('timelineHost');
+  let items = plan.items.slice();
+  if(filter==='open') items = items.filter(i=>!i.done);
+  if(filter==='cost') items = items.filter(i=> i.cost!==null && i.cost!==undefined && i.cost!=='');
+  if(catFilter!=='all') items = items.filter(i=> (i.category||'etc')===catFilter);
+
+  if(items.length===0){
+    host.innerHTML = `<div class="empty"><div class="big">해당하는 기록이 없어요</div>필터를 바꾸거나 위에서 새 항목을 추가해보세요.</div>`;
+    return;
+  }
+
+  items.sort((a,b)=> (a.date||'').localeCompare(b.date||'') || (a.createdAt||0)-(b.createdAt||0));
+  const groups = {};
+  items.forEach(i=>{ (groups[i.date] = groups[i.date] || []).push(i); });
+
+  const todayStr = new Date().toISOString().slice(0,10);
+  let html = '<div class="timeline">';
+  Object.keys(groups).forEach(dateStr=>{
+    const dd = dday(dateStr);
+    const cls = dateStr===todayStr ? 'today' : (dd!==null && dd<0 ? 'past' : '');
+    html += `<div class="date-group ${cls}">
+      <div class="date-head">
+        <span class="date-dot"></span>
+        <span class="date-label">${fmtDateLabel(dateStr)}</span>
+        <span class="date-dday">${dd===null?'':(dd===0?'오늘':(dd>0?'D-'+dd:'D+'+Math.abs(dd)))}</span>
+      </div>`;
+    groups[dateStr].forEach(item=>{
+      const ci = catInfo(item.category);
+      html += `<div class="item-card ${item.done?'done':''}" data-id="${item.id}" style="border-left-color:${ci.color}">
+        <button class="check ${item.done?'checked':''}" data-id="${item.id}" aria-label="완료 표시"></button>
+        <div class="item-body">
+          <div class="item-title">${escapeHtml(item.title)}</div>
+          ${item.memo?`<div class="item-memo">${escapeHtml(item.memo)}</div>`:''}
+          <div class="item-meta">
+            <span class="tag" style="background:${ci.color}22; color:${ci.color}">${ci.label}</span>
+            ${item.cost!==null && item.cost!==undefined && item.cost!==''?`<span class="tag cost">${fmtMoney(item.cost)}</span>`:''}
+            <span class="tag author">${escapeHtml(plan.names[item.author] || plan.names[0])}</span>
+          </div>
+        </div>
+        <button class="del-btn" data-id="${item.id}" aria-label="삭제">✕</button>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  html += '</div>';
+  host.innerHTML = html;
+
+  host.querySelectorAll('.check').forEach(btn=> btn.addEventListener('click', ()=> toggleDone(btn.dataset.id)));
+  host.querySelectorAll('.del-btn').forEach(btn=> btn.addEventListener('click', ()=> deleteItem(btn.dataset.id)));
+}
+
+function toggleDone(id){
+  const item = plan.items.find(i=>i.id===id);
+  if(!item) return;
+  item.done = !item.done;
+  render();
+  savePlan();
+}
+function deleteItem(id){
+  plan.items = plan.items.filter(i=>i.id!==id);
+  render();
+  savePlan();
+}
+
+let pendingNewCat = CATEGORIES[0].key;
+
+function bindEvents(){
+  pendingNewCat = CATEGORIES[0].key;
+
+  document.getElementById('settingsToggle').addEventListener('click', ()=>{
+    document.getElementById('settingsPanel').classList.toggle('open');
+  });
+
+  document.querySelectorAll('#settingsPanel .seg-btn[data-role]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      myRole = Number(btn.dataset.role);
+      document.querySelectorAll('#settingsPanel .seg-btn[data-role]').forEach(b=> b.classList.toggle('active', Number(b.dataset.role)===myRole));
+      document.querySelectorAll('#newAuthorToggle .seg-btn').forEach(b=> b.classList.toggle('active', Number(b.dataset.role)===myRole));
+    });
+  });
+
+  document.getElementById('saveSettings').addEventListener('click', async ()=>{
+    plan.movingDate = document.getElementById('movingDateInput').value;
+    plan.names[0] = document.getElementById('name0Input').value.trim() || '아내';
+    plan.names[1] = document.getElementById('name1Input').value.trim() || '남편';
+    const bVal = document.getElementById('budgetInput').value;
+    plan.budget = bVal==='' ? null : Number(bVal);
+    saveRole();
+    await savePlan();
+    render();
+  });
+
+  document.querySelectorAll('#newAuthorToggle .seg-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      myRole = Number(btn.dataset.role);
+      saveRole();
+      document.querySelectorAll('#newAuthorToggle .seg-btn').forEach(b=> b.classList.toggle('active', Number(b.dataset.role)===myRole));
+    });
+  });
+
+  document.querySelectorAll('#newCatToggle .seg-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      pendingNewCat = btn.dataset.cat;
+      document.querySelectorAll('#newCatToggle .seg-btn').forEach(b=> b.classList.toggle('active', b.dataset.cat===pendingNewCat));
+    });
+  });
+
+  document.querySelectorAll('.filters:not(.cats) .chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      filter = chip.dataset.f;
+      renderTimeline();
+      document.querySelectorAll('.filters:not(.cats) .chip').forEach(c=> c.classList.toggle('active', c.dataset.f===filter));
+    });
+  });
+
+  document.querySelectorAll('.filters.cats .chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      catFilter = chip.dataset.cf;
+      renderTimeline();
+      document.querySelectorAll('.filters.cats .chip').forEach(c=> c.classList.toggle('active', c.dataset.cf===catFilter));
+    });
+  });
+
+  document.getElementById('addBtn').addEventListener('click', addItem);
+  document.getElementById('newTitle').addEventListener('keydown', e=>{ if(e.key==='Enter') addItem(); });
+}
+
+async function addItem(){
+  const dateVal = document.getElementById('newDate').value;
+  const titleVal = document.getElementById('newTitle').value.trim();
+  const costVal = document.getElementById('newCost').value;
+  const memoVal = document.getElementById('newMemo').value.trim();
+
+  if(!dateVal || !titleVal){ document.getElementById('newTitle').focus(); return; }
+
+  plan.items.push({
+    id: uid(), date: dateVal, title: titleVal, memo: memoVal,
+    cost: costVal==='' ? null : Number(costVal),
+    category: pendingNewCat, done: false, author: myRole, createdAt: Date.now()
+  });
+
+  saveRole();
+  render();
+  await savePlan();
+}
+
+initSupabase();
+</script>
+</body>
+</html>
